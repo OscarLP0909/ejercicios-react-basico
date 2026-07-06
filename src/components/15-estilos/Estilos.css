@@ -1,0 +1,11 @@
+.tarjeta-estilos {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.tarjeta-estilos--destacada {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+}

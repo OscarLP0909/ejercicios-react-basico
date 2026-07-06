@@ -6,6 +6,9 @@ import Expresiones from './components/11-expresiones/Expresiones';
 import ListaTareas from './components/12-lista-tareas/ListaTareas';
 import Tarjeta from './components/13-correccion-errores/Correccion';
 import Condicional from './components/14-condicional/Condicional';
+import Estilos from './components/15-estilos/Estilos';
+import Lista from './components/16-Lista/Lista';
+import AtributosDinamicos from './components/17-atributos-dinamicos/AtributosDinamicos';
 
 function App() {
 
@@ -24,6 +27,12 @@ function App() {
       <Tarjeta />
       <br></br>
       <Condicional />
+      <br></br>
+      <Estilos />
+      <br></br>
+      <Lista />
+      <br></br>
+      <AtributosDinamicos />
     </>
   );
 }
