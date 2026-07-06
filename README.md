@@ -110,6 +110,115 @@ Se dividen responsabilidades: **Prettier controla el formato** (espacios, comill
 > Nota: si se quisiera que ESLint también marcara como *error* el código mal formateado (en vez de depender solo de `npm run format` por separado), se podría añadir `eslint-plugin-prettier` con la regla `'prettier/prettier': 'error'`. No implementado en este ejercicio por simplicidad.
 
 
+## 6. Configuración de TypeScript en React
+
+Partiendo de un proyecto Vite + React sin TypeScript, se añadió TS a posteriori para simular un caso de migración real.
+
+### Instalación
+
+```bash
+npm install -D typescript @types/react @types/react-dom typescript-eslint
+```
+
+### `tsconfig.json`
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "src/**/*", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**Opciones clave:**
+- `moduleResolution: "bundler"` — usa la misma lógica de resolución de módulos que Vite.
+- `jsx: "react-jsx"` — nuevo JSX transform, no requiere `import React` en cada archivo.
+- `strict: true` — activa todas las comprobaciones estrictas de tipos (null-checks, no-implicit-any...).
+- `noEmit: true` — TS solo chequea tipos; Vite/ESBuild se encargan de compilar y empaquetar.
+- `isolatedModules: true` — requisito para que cada archivo pueda transpilarse de forma aislada (necesario para ESBuild).
+
+### Pasos de migración
+
+1. Renombrar archivos existentes de `.jsx` → `.tsx`: `App.jsx → App.tsx`, `main.jsx → main.tsx`.
+2. Actualizar `index.html` para apuntar a `/src/main.tsx`.
+3. Añadir `typescript-eslint` a `eslint.config.js` para que ESLint analice también archivos `.ts`/`.tsx`.
+4. Crear `src/vite-env.d.ts` con:
+   \`\`\`ts
+   /// <reference types="vite/client" />
+   \`\`\`
+   Necesario para que TypeScript reconozca imports de `.svg`, `.png`, `.css` como módulos válidos
+5. Resolver el error de `strict` en `main.tsx` sobre `document.getElementById('root')` (puede devolver `null`), usando el operador de aserción no-nula:
+    ```tsx
+   createRoot(document.getElementById('root')!).render(...)
+   ```
+
+### Ejemplo de conversión JS → TS
+
+**Antes (`Tarjeta.jsx`):**
+```jsx
+function Tarjeta({ nombre, ocupacion }) {
+  return (
+    <div>
+      <h2>{nombre}</h2>
+      <p>{ocupacion}</p>
+    </div>
+  );
+}
+
+export default Tarjeta;
+```
+
+**Después (`Tarjeta.tsx`):**
+```tsx
+interface TarjetaProps {
+  nombre: string;
+  ocupacion: string;
+}
+
+function Tarjeta({ nombre, ocupacion }: TarjetaProps) {
+  return (
+    <div>
+      <h2>{nombre}</h2>
+      <p>{ocupacion}</p>
+    </div>
+  );
+}
+
+export default Tarjeta;
+```
+
+### Ventajas que aporta TypeScript
+
+- Detecta errores de tipos en tiempo de desarrollo, antes de ejecutar el código.
+- Autocompletado e IntelliSense más precisos en el editor.
+- Las `interface`/`type` de props documentan el propio código como contrato explícito.
+- Refactorizar es más seguro: renombrar una prop avisa de todos los sitios que faltan actualizar.
+- Encaja directamente con el stack empresarial habitual (TypeScript + Angular + NestJS).
+
+### Verificación
+
+```bash
+npx tsc --noEmit
+```
+
+Sin errores tras aplicar los pasos anteriores.
+
 
 ## 8. Estructura de proyecto React
 
