@@ -10,6 +10,9 @@ import Perfil from './components/02-componentes/09-perfil/Perfil';
 import ListaItems from './components/02-componentes/10-lista-items/ListaItems';
 import Notificacion from './components/02-componentes/11-notificacion/Notificacion';
 import MenuMultinivel from './components/02-componentes/12-menu-multinivel/MenuMultinivel';
+import EstadoTarea from './components/02-componentes/13-estado-tarea/EstadoTarea';
+import MensajeError from './components/02-componentes/14-mensaje-error/MensajeError';
+import ListaTareasFiltro from './components/02-componentes/15-lista-tareas/ListaTareasFiltro';
 
 function EjerciciosComponentes() {
   return (
@@ -85,6 +88,25 @@ function EjerciciosComponentes() {
         ]
       }
     ]} />
+
+    <h2>Ejercicio 13</h2>
+    <EstadoTarea titulo="Terminar ejercicios de React" completada={false} />
+    <EstadoTarea titulo="Configurar ESLint y Prettier" completada={true} />
+
+    <h2>Ejercicio 14</h2>
+    <MensajeError error="El campo email es obligatorio." />
+    <MensajeError error={null} />
+    <MensajeError />
+
+    <h2>Ejercicio 15</h2>
+    <ListaTareasFiltro
+        tareas={[
+            { id: 't1', titulo: 'Terminar ejercicios de React', completada: false },
+            { id: 't2', titulo: 'Configurar ESLint y Prettier', completada: true },
+            { id: 't3', titulo: 'Migrar a TypeScript', completada: true },
+            { id: 't4', titulo: 'Repasar Angular antes de EY', completada: false },
+  ]}
+/>
     </section>
   );
 }
